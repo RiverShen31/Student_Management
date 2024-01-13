@@ -9,11 +9,11 @@ using namespace std;
 struct Student {
     int id;
     char Name[30];
-    char Gender[5];
+    char Gender[10];
     int Age;
     float CPA;
     float Credit;
-    char Rank[10] = "-";
+    char Rank[15] = "-";
 };
  
 typedef Student student;
@@ -21,6 +21,11 @@ typedef Student student;
 void printLine(int n);
 void EnterStudenInfo(student &sv, int id);
 void AddStudent(student a[], int id, int n);
+void UpdateStudentInfoName(student a[], int id, int n);
+void UpdateStudentInfoGender(student a[], int id, int n);
+void UpdateStudentInfoAge(student a[], int id, int n);
+void UpdateStudentInfoCPA(student a[], int id, int n);
+void UpdateStudentInfoCredit(student a[], int id, int n);
 void UpdateStudentInfo(student &sv);
 void UpdateStudent(student a[], int id, int n);
 int DeleteById(student a[], int id, int n);
@@ -42,6 +47,8 @@ void ShowStudent(student a[], int n);
 int ReadFile(student a[], char fileName[]);
 void SaveFile(student a[], int n, char fileName[]);
 void pressAnyKey();
+
+vector<int> parseInputString(string& input);
  
 int main() {
     int key;
@@ -83,31 +90,114 @@ int main() {
                 if(countStudent > 0) {
                     int id;
                     cout << "\n2. Update Student Info. ";
+                    ShowStudent(listStudent, countStudent);
                     cout << "\n Enter ID: "; cin >> id;
-                    UpdateStudent(listStudent, id, countStudent);
-                    SaveFile(listStudent, countStudent, fileName);
-                    printf("\nUpdate into file successfully!\n");
+                    cout << "\n Enter option you want to update: ";
+                    cout << "\n ---------------------------------";
+                    cout << "\n -- 1. Name                     --";
+                    cout << "\n -- 2. Gender                   --";
+                    cout << "\n -- 3. Age                      --";
+                    cout << "\n -- 4. CPA                      --";
+                    cout << "\n -- 5. Credit                   --";
+                    cout << "\n -- 6. All                      --";
+                    cout << "\n ---------------------------------";
+                    cout << "\n Enter option: "; cin >> key;
+                    switch (key)
+                    {
+                    case 1:
+                        UpdateStudentInfoName(listStudent, id, countStudent);
+                        SaveFile(listStudent, countStudent, fileName);
+                        printf("\nUpdate into file successfully!\n");
+                        break;
+
+                    case 2:
+                        UpdateStudentInfoGender(listStudent, id, countStudent);
+                        SaveFile(listStudent, countStudent, fileName);
+                        printf("\nUpdate into file successfully!\n");
+                        break;
+
+                    case 3:
+                        UpdateStudentInfoAge(listStudent, id , countStudent);
+                        SaveFile(listStudent, countStudent, fileName);
+                        printf("\nUpdate into file successfully!\n");
+                        break;
+                    
+                    case 4:
+                        UpdateStudentInfoCPA(listStudent, id, countStudent);
+                        SaveFile(listStudent, countStudent, fileName);
+                        printf("\nUpdate into file successfully!\n");
+                        break;
+
+                    case 5:
+                        UpdateStudentInfoCredit(listStudent, id, countStudent);
+                        SaveFile(listStudent, countStudent, fileName);
+                        printf("\nUpdate into file successfully!\n");
+                        break;
+
+                    case 6:
+                        UpdateStudent(listStudent, id, countStudent);
+                        SaveFile(listStudent, countStudent, fileName);
+                        printf("\nUpdate into file successfully!\n");
+                        break;
+
+                    default:
+                        break;
+                    }
                 }else{
                     cout << "\nMust have student to update!";
                 }
                 pressAnyKey();
                 break;
+            
             case 3:
-                if(countStudent > 0) {
-                    int id;
+                if (countStudent > 0) {
                     cout << "\n3. Delete Student.";
-                    cout << "\n Enter ID: "; cin >> id;
-                    if (DeleteById(listStudent, id, countStudent) == 1) {
-                        printf("\nStudent with Id = %d have been removed.\n", &id);
-                        countStudent--;
-                        SaveFile(listStudent, countStudent, fileName);
-                        printf("\nUpdate into file successfully!");
+                    ShowStudent(listStudent, countStudent);
+                    cout << "\n ---------------";
+                    cout << "\n - 1. MANY     -";
+                    cout << "\n - 2. ONE      -";
+                    cout << "\n ---------------";
+                    cout << "\nEnter option: ";
+                    cin >> key;
+
+                    string input;
+                    vector<int> idsToDelete;
+
+                    switch (key) {
+                        case 1:
+                            cout << "\nEnter IDs of students to delete (separated by spaces): ";
+                            cin.ignore();
+                            getline(cin, input);
+                            idsToDelete = parseInputString(input);
+                            for (int id : idsToDelete) {
+                                if (DeleteById(listStudent, id, countStudent) == 1) {
+                                    printf("\nStudent with ID = %d has been removed.\n", id);
+                                    countStudent--;
+                                }
+                            }
+                            SaveFile(listStudent, countStudent, fileName);
+                            printf("\nUpdate into file successfully!");
+                            break;
+                        case 2:
+                            cout << "\nEnter ID: ";
+                            int id;
+                            cin >> id;
+                            if (DeleteById(listStudent, id, countStudent) == 1) {
+                                printf("\nStudent with ID = %d has been removed.\n", id);
+                                countStudent--;
+                                SaveFile(listStudent, countStudent, fileName);
+                                printf("\nUpdate into file successfully!");
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                }else{
+                } else {
                     cout << "\nMust have student to delete!";
                 }
                 pressAnyKey();
                 break;
+            
             case 4:
                 if(countStudent > 0) {
                     cout << "\n-----------------------------------";
@@ -317,6 +407,82 @@ void UpdateStudentInfo(student &sv) {
     cout << " Enter credit: "; cin >> sv.Credit;
     SetRank(sv);
 }
+
+void UpdateStudentInfoName(student a[], int id, int n) {
+    int found = 0;
+    for (int i=0; i<n; i++) {
+        if (a[i].id == id) {
+            found = 1;
+            printLine(40);
+            cout << "\n Enter name: "; fflush(stdin); gets(a[i].Name);
+            break;
+        }
+    }
+    if (found == 0) {
+        printf("\n Student with ID = %d doesn't exist.", id);
+    }
+}
+
+void UpdateStudentInfoGender(student a[], int id, int n) {
+    int found = 0;
+    for (int i=0; i<n; i++) {
+        if (a[i].id == id) {
+            found = 1;
+            printLine(40);
+            cout << "\n Enter gender: "; fflush(stdin); gets(a[i].Gender);
+            break;
+        }
+    }
+    if (found == 0) {
+        printf("\n Student with ID = %d doesn't exist.", id);
+    }
+}
+
+void UpdateStudentInfoAge(student a[], int id, int n) {
+    int found = 0;
+    for (int i=0; i<n; i++) {
+        if (a[i].id == id) {
+            found = 1;
+            printLine(40);
+            cout << "\n Enter age: "; fflush(stdin);  cin >> a[i].Age;
+            break;
+        }
+    }
+    if (found == 0) {
+        printf("\n Student with ID = %d doesn't exist.", id);
+    }
+}
+
+void UpdateStudentInfoCPA(student a[], int id, int n) {
+    int found = 0;
+    for (int i=0; i<n; i++) {
+        if (a[i].id == id) {
+            found = 1;
+            printLine(40);
+            cout << "\n Enter CPA: "; fflush(stdin); cin >> a[i].CPA;
+            SetRank(a[i]);
+            break;
+        }
+    }
+    if (found == 0) {
+        printf("\n Student with ID = %d doesn't exist.", id);
+    }
+}
+
+void UpdateStudentInfoCredit(student a[], int id, int n) {
+    int found = 0;
+    for (int i=0; i<n; i++) {
+        if (a[i].id == id) {
+            found = 1;
+            printLine(40);
+            cout << "\n Enter credit: "; fflush(stdin); cin >> a[i].Credit;
+            break;
+        }
+    }
+    if (found == 0) {
+        printf("\n Student with ID = %d doesn't exist.", id);
+    }
+}
  
 void UpdateStudent(student a[], int id, int n) {
     int found = 0;
@@ -458,18 +624,18 @@ void FindByCredit(student a[], float credit, int n) {
 }
  
 void ShowStudent(student a[], int n) {
-    printLine(100);
-    cout <<"\nSTT\tID\tName\tGender\tAge\tCPA\tCredit\tRank";
+    printLine(120);
+    cout <<"\n STT\t ID\t\t Name\t\t Gender\t\t Age\t\t CPA\t\t Credit\t\t Rank";
     for(int i = 0; i < n; i++) {
         printf("\n %d", i + 1);
-        printf("\t%d", a[i].id);
-        printf("\t%s", a[i].Name);
-        printf("\t%s", a[i].Gender);
-        printf("\t%d", a[i].Age);
-        printf("\t%.2f\t%.2f", a[i].CPA, a[i].Credit);
-        printf("\t%s", a[i].Rank);
+        printf("\t %d", a[i].id);
+        printf("\t\t %s", a[i].Name);
+        printf("\t\t %s", a[i].Gender);
+        printf("\t\t %d", a[i].Age);
+        printf("\t\t %.2f\t\t %.2f", a[i].CPA, a[i].Credit);
+        printf("\t\t %s", a[i].Rank);
     }
-    printLine(100);
+    printLine(120);
 }
 
 void SortStudentByAge(student a[], int n) {
@@ -552,12 +718,17 @@ int ReadFile(student a[], char fileName[]) {
     int i = 0;
     fp = fopen (fileName, "r");
     cout << "Read file: "; puts(fileName);
+
+    if (fp == nullptr) {
+        cout << "Error opening file." << endl;
+        return 0;
+    }
     // doc thong tin sinh vien
-    while (fscanf(fp, "%5d%30s%5s%5d%10f%10f%10s\n", &a[i].id, &a[i].Name, 
+    while (fscanf(fp, "%5d%30s%15s%15d%15f%15f%15s\n", &a[i].id, &a[i].Name, 
             &a[i].Gender, &a[i].Age, &a[i].CPA, &a[i].Credit, &a[i].Rank) != EOF) {
         // cout << a[i].id << " " << a[i].Name << endl;
        i++;
-       cout << " Doc ban ghi thu: " << i << endl;
+       cout << " Read record number: " << i << endl;
     }
     cout << " Number of student in file: " << i << endl;
     cout << endl;
@@ -570,7 +741,7 @@ void SaveFile(student a[], int n, char fileName[]) {
     FILE * fp;
     fp = fopen (fileName,"w");
     for(int i = 0;i < n;i++){
-        fprintf(fp, "%5d%30s%5s%5d%10f%10f%10s\n", a[i].id, a[i].Name,a[i].Gender, 
+        fprintf(fp, "%5d%30s%15s%15d%15f%15f%15s\n", a[i].id, a[i].Name,a[i].Gender, 
             a[i].Age, a[i].CPA, a[i].Credit, a[i].Rank);
     }
     fclose (fp);
@@ -588,4 +759,14 @@ void pressAnyKey() {
     cout << "\n\nEnter any key to continue...";
     getch();
     system("cls");
+}
+
+vector<int> parseInputString(string& input) {
+    vector<int> result;
+    istringstream iss(input);
+    int value;
+    while (iss >> value) {
+        result.push_back(value);
+    }
+    return result;
 }
