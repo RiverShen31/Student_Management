@@ -3,6 +3,10 @@
 #include <iostream>
 #include <string.h>
 #include <bits/stdc++.h>
+#include <algorithm>
+#include <cctype>
+#include <string>
+
 #define MAX 100
 using namespace std;
  

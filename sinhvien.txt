@@ -1,12 +1,9 @@
     1                           Lam           Male             20       3.300000      77.000000           Good
-    3                         Chien           Male             21       3.000000      77.000000        Average
+    3                          Binh           Male             21       3.000000      77.000000        Average
     6                         Khanh           Male             20       2.800000      69.000000        Average
     7                         Khanh           Male             20       2.800000      69.000000        Average
-    8                         Khanh           Male             20       2.800000      69.000000        Average
     9                         Khanh           Male             20       2.800000      69.000000        Average
-   10                         Khanh           Male             20       2.800000      69.000000        Average
    11                         Khanh           Male             20       2.800000      69.000000        Average
-   12                         Khanh           Male             20       2.800000      69.000000        Average
    13                         Khanh           Male             20       2.800000      69.000000        Average
    14                         Khanh           Male             20       2.800000      69.000000        Average
    19                         Khanh           Male             20       2.800000      69.000000        Average
